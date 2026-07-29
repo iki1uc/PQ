@@ -2,209 +2,141 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>IKI1UC · System Runtime</title>
+<title>PQ · 243 Dashboard · IKI‑UC‑213 Cluster</title>
 
 <style>
-body { background:#000; color:#0ff; font-family:Consolas; padding:20px; }
-h1 { color:#6cf; }
-h2 { color:#0f0; margin-top:30px; }
-pre { background:#111; padding:12px; border:1px solid #333; border-radius:6px; }
-#input { width:400px; padding:10px; background:#111; color:#0f0; border:1px solid #333; }
-button { margin:5px; padding:10px; background:#111; color:#0f0; border:1px solid #333; }
+    body {
+        background:#000;
+        color:#0f0;
+        font-family:monospace;
+        margin:0;
+        padding:20px;
+    }
+    canvas {
+        border:1px solid #0f0;
+        margin-bottom:20px;
+    }
 </style>
-
-<script type="module">
-
-// =========================
-// IKI1UC · System-ID
-// =========================
-
-const ID = {
-    mode: "neutral",
-
-    set(mode){
-        this.mode = mode;
-    },
-
-    info(){
-        switch(this.mode){
-            case "koop": return "KOOP · Kooperation · Stabilisierung";
-            case "neutral": return "NEUTRAL · Ausgleich · Mitte";
-            case "pook": return "POOK · Gegenachse · Drift";
-            default: return "Unbekannter Modus";
-        }
-    },
-
-    system(whirl){
-        return {
-            id_mode: this.mode,
-            core: whirl.core,
-            drift: whirl.S4,
-            axis: {
-                B: whirl.S1,
-                H: whirl.S2,
-                T: whirl.S3
-            },
-            seq: whirl.seq
-        };
-    }
-};
-
-// =========================
-// Dummy WHIRL (Demo-Version)
-// =========================
-
-function WHIRL(v){
-    return {
-        core: "WHIRL_CORE",
-        S1: v.x,
-        S2: v.y,
-        S3: v.z,
-        S4: v.x + v.y + v.z,
-        seq: performance.now()
-    };
-}
-
-// =========================
-// TMP
-// =========================
-
-const TMP = {};
-
-function TMP_Whirl(w){
-    TMP.B = w.S1;
-    TMP.H = w.S2;
-    TMP.T = w.S3;
-    TMP.seq = w.seq;
-}
-
-// =========================
-// PQ
-// =========================
-
-const PQ_HISTORY = [];
-
-function PQ_PC_Parallel(w){
-    const task = {
-        id: ID.system(w),
-        core: w.core,
-        axis: { B: w.S1, H: w.S2, T: w.S3 },
-        drift: w.S4,
-        seq: w.seq
-    };
-
-    PQ_HISTORY.push(task);
-    return task;
-}
-
-// =========================
-// RESPO
-// =========================
-
-const RESPO_LOG = [];
-
-function RESPO_Whirl(w){
-    const flow = {
-        id: ID.system(w),
-        core: w.core,
-        drift: w.S4,
-        seq: w.seq
-    };
-
-    RESPO_LOG.push(flow);
-    return flow;
-}
-
-// =========================
-// NC
-// =========================
-
-const NC_LOG = [];
-
-function NC_link_Whirl(w){
-    const link = {
-        id: ID.system(w),
-        axis: { B: w.S1, H: w.S2, T: w.S3 },
-        seq: w.seq
-    };
-
-    NC_LOG.push(link);
-    return link;
-}
-
-// =========================
-// PIPELINE
-// =========================
-
-function PIPELINE_LOAD(input){
-
-    const v = { x: input.length, y: input.length/2, z: input.length/3 };
-    const whirl = WHIRL(v);
-
-    TMP_Whirl(whirl);
-    const pq = PQ_PC_Parallel(whirl);
-    const respo = RESPO_Whirl(whirl);
-    const nc = NC_link_Whirl(whirl);
-
-    return { whirl, pq, respo, nc };
-}
-
-// =========================
-// UI
-// =========================
-
-document.addEventListener("keydown", e => {
-    if(e.key === "Enter"){
-        const text = document.getElementById("input").value;
-        const out = PIPELINE_LOAD(text);
-
-        document.getElementById("id").textContent = ID.info();
-        document.getElementById("whirl").textContent = JSON.stringify(out.whirl, null, 2);
-        document.getElementById("pq").textContent = JSON.stringify(PQ_HISTORY, null, 2);
-        document.getElementById("respo").textContent = JSON.stringify(RESPO_LOG, null, 2);
-        document.getElementById("nc").textContent = JSON.stringify(NC_LOG, null, 2);
-        document.getElementById("tmp").textContent = JSON.stringify(TMP, null, 2);
-    }
-});
-
-window.setID = function(mode){
-    ID.set(mode);
-    document.getElementById("id").textContent = ID.info();
-};
-
-</script>
-
 </head>
 
 <body>
 
-<h1>IKI1UC · System Runtime</h1>
+<h1>PQ · 243 Dashboard · IKI‑UC‑213 Cluster</h1>
 
-<h2>ID-Modus</h2>
-<button onclick="setID('koop')">KOOP</button>
-<button onclick="setID('neutral')">NEUTRAL</button>
-<button onclick="setID('pook')">POOK</button>
+<!-- PQ‑Root‑243 Dashboard -->
+<canvas id="pq243" width="600" height="200"></canvas>
 
-<pre id="id">Neutral</pre>
+<!-- IKI‑UC‑213 Cluster -->
+<canvas id="cluster213" width="600" height="200"></canvas>
 
-<h2>Input</h2>
-<input id="input" placeholder="ENTER → Pipeline Load">
+<!-- PQ‑Vector Datenleck -->
+<canvas id="pqLeak" width="600" height="200"></canvas>
 
-<h2>WHIRL</h2>
-<pre id="whirl">Warte…</pre>
+<script type="module">
+import { PALAISE_RESPO } from "./PALAISE.RESPO.js";
+import { PQ_RUN } from "./PQ.js";
+import { RESPO_WHIRL } from "./RESPO_Whirl.js";
 
-<h2>PQ_HISTORY</h2>
-<pre id="pq">Warte…</pre>
+/* ============================================================
+   PQ‑Root‑243 Dashboard
+============================================================ */
+async function renderPQ243(){
+    const truth = await PALAISE_RESPO.truth("BEN");
+    const root = truth.pqVector.D0;
 
-<h2>RESPO_LOG</h2>
-<pre id="respo">Warte…</pre>
+    const c = document.getElementById("pq243");
+    const ctx = c.getContext("2d");
 
-<h2>NC_LOG</h2>
-<pre id="nc">Warte…</pre>
+    ctx.clearRect(0,0,600,200);
 
-<h2>TMP-Achsen</h2>
-<pre id="tmp">Warte…</pre>
+    ctx.fillStyle = "#0f0";
+    ctx.fillText("PQ‑Root: " + root, 20, 40);
+
+    ctx.fillStyle = "#ff0";
+    ctx.fillRect(20, 80, root, 20);
+}
+
+setInterval(renderPQ243, 200);
+
+/* ============================================================
+   IKI‑UC‑213 Cluster
+============================================================ */
+async function renderCluster213(){
+    const truth = await PALAISE_RESPO.truth("BEN");
+    const sys = 213;
+
+    const c = document.getElementById("cluster213");
+    const ctx = c.getContext("2d");
+
+    ctx.clearRect(0,0,600,200);
+
+    ctx.fillStyle = "#0f0";
+    ctx.fillText("IKI‑UC‑SYS: 213", 20, 40);
+
+    ctx.strokeStyle = "#0f0";
+    ctx.strokeRect(20, 80, 100, 100); // Cluster
+    ctx.beginPath();
+    ctx.moveTo(150, 80);
+    ctx.lineTo(250, 180); // Kette
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(350, 130, 50, 0, Math.PI*2); // Pool
+    ctx.stroke();
+}
+
+setInterval(renderCluster213, 200);
+
+/* ============================================================
+   PQ‑Vector Datenleck
+============================================================ */
+async function renderPQLeak(){
+    const truth = await PALAISE_RESPO.truth("BEN");
+    const v = truth.pqVector;
+
+    const c = document.getElementById("pqLeak");
+    const ctx = c.getContext("2d");
+
+    ctx.clearRect(0,0,600,200);
+
+    ctx.fillStyle = "#0f0";
+    ctx.fillText("PQ‑Vector Datenleck:", 20, 40);
+
+    const arr = [v.D0, v.D1, v.D2, v.D3, v.D4, v.D5];
+
+    arr.forEach((val, i)=>{
+        ctx.fillStyle = "#0f0";
+        ctx.fillRect(20 + i*100, 80, val*50, 20);
+        ctx.fillText("D"+i+": "+val.toFixed(3), 20 + i*100, 120);
+    });
+}
+
+setInterval(renderPQLeak, 200);
+
+/* ============================================================
+   RESPO‑Kanal‑Switcher
+============================================================ */
+async function RESPO_SWITCH(){
+    const truth = await PALAISE_RESPO.truth("BEN");
+    const root = truth.pqVector.D0;
+
+    if(root < 100){
+        console.log("RESPO: PALAISE_RESPO");
+    }
+    else if(root < 200){
+        console.log("RESPO: RESPO_ARG_SCAN");
+    }
+    else if(root < 300){
+        console.log("RESPO: RESPO_Whirl");
+        RESPO_WHIRL(truth);
+    }
+    else {
+        console.log("RESPO: RESPO_Whirl + NC_HUB_ALL");
+    }
+}
+
+setInterval(RESPO_SWITCH, 200);
+
+</script>
 
 </body>
 </html>
-1
