@@ -1,24 +1,21 @@
 export const ID = {
 
-    Ursprung: {
-        info() {
-            return "Ursprung · keine Richtung · keine Achse";
-        }
+    mode: "neutral",   // Standardmodus
+
+    set(mode){
+        this.mode = mode;
     },
 
-    Läufer: {
-        info() {
-            return "Läufer · Bewegung · erzeugt Richtung · macht aus 0 eine 1";
-        }
-    },
-
-    Achse: {
-        info() {
-            return "Achse · entstandene Struktur · stabilisierte Richtung";
+    info(){
+        switch(this.mode){
+            case "koop":
+                return "KOOP · Kooperation · Stabilisierung · gemeinsame Achse";
+            case "neutral":
+                return "NEUTRAL · Ausgleich · Mitte · keine Drift";
+            case "pook":
+                return "POOK · Gegenachse · Drift · Reaktion";
+            default:
+                return "Unbekannter Modus";
         }
     }
 };
-
-export function ID_STATE(mode){
-    return ID[mode].info();
-}
