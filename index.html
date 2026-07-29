@@ -37,47 +37,13 @@ pre { white-space:pre-wrap; }
     <pre id="nc"></pre>
 </div>
 
-<!-- PQ Hyperparallel -->
-<div class="panel">
-    <h2>PQ‑Hyperparallel‑Flow‑Graph</h2>
-    <canvas id="pqFlow" width="600" height="200"></canvas>
-    <pre id="pq"></pre>
-</div>
-
-<!-- TMP Ghost Echo -->
-<div class="panel">
-    <h2>TMP‑Ghost‑Echo‑Wave</h2>
-    <canvas id="tmpEcho" width="600" height="200"></canvas>
-    <pre id="tmp"></pre>
-</div>
-
-<!-- HUB ALL AI -->
-<div class="panel">
-    <h2>HUB‑ALL‑AI‑Pulse‑Map</h2>
-    <canvas id="hubPulse" width="600" height="200"></canvas>
-    <pre id="hub"></pre>
-</div>
-
-<!-- NET LINK NC -->
-<div class="panel">
-    <h2>NET‑LINK‑NC‑Fusion‑Sphere</h2>
-    <canvas id="netSphere" width="600" height="200"></canvas>
-    <pre id="net"></pre>
-</div>
-
 <script type="module">
-/* ============================================================
-   IMPORT ALL MODULES
-============================================================ */
 import { NC_QUANTUM } from "./NC/NC_Quantum.js";
 import { PQ_HYPER } from "./PQ/PQ_Hyper.js";
 import { TMP_GHOST } from "./TMP/TMP_Ghost.js";
 import { HUB_AI } from "./HUB/HUB_AI.js";
 import { NET_OVERDRIVE } from "./NET/NET_Overdrive.js";
 
-/* ============================================================
-   INIT MODULES
-============================================================ */
 const nc = NC_QUANTUM();
 const pq = PQ_HYPER(nc);
 const tmp = TMP_GHOST(pq);
@@ -85,37 +51,35 @@ const hub = HUB_AI(nc, pq, tmp);
 const net = NET_OVERDRIVE(nc, pq, tmp, hub);
 
 /* ============================================================
-   RENDER TEXT OUTPUT
-============================================================ */
-document.getElementById("nc").textContent = JSON.stringify(nc, null, 2);
-document.getElementById("pq").textContent = JSON.stringify(pq, null, 2);
-document.getElementById("tmp").textContent = JSON.stringify(tmp, null, 2);
-document.getElementById("hub").textContent = JSON.stringify(hub, null, 2);
-document.getElementById("net").textContent = JSON.stringify(net, null, 2);
-
-/* ============================================================
-   NC‑Quantum‑Spin‑Animation
+   NC‑Quantum‑Spin‑Animation (4D‑Upgrade)
 ============================================================ */
 function renderNC(){
     const c = document.getElementById("ncSpin");
     const ctx = c.getContext("2d");
     ctx.clearRect(0,0,600,200);
 
-    ctx.fillStyle="#0f0";
+    // Sphere
+    ctx.strokeStyle="#0f0";
     ctx.beginPath();
-    ctx.arc(300,100,50,0,Math.PI*2);
+    ctx.arc(300,100,60,0,Math.PI*2);
     ctx.stroke();
 
+    // Quantum spin particle
     ctx.save();
     ctx.translate(300,100);
-    ctx.rotate((nc.spin+=0.05));
-    ctx.fillRect(50,0,10,10);
+    ctx.rotate((nc.spin+=0.03));
+    ctx.fillStyle="#6f6";
+    ctx.fillRect(60,0,12,12);
     ctx.restore();
+
+    // Energy pulse
+    ctx.fillStyle="#0f0";
+    ctx.fillRect(20,180, nc.energy/10, 5);
 }
 setInterval(renderNC, 30);
 
 /* ============================================================
-   PQ‑Hyperparallel‑Flow‑Graph
+   PQ‑Hyperparallel‑Flow‑Graph (4D‑Upgrade)
 ============================================================ */
 function renderPQ(){
     const c = document.getElementById("pqFlow");
@@ -123,12 +87,15 @@ function renderPQ(){
     ctx.clearRect(0,0,600,200);
 
     ctx.fillStyle="#6cf";
-    ctx.fillRect(20,150-pq.load, pq.load*5, 20);
+    ctx.fillRect(20,150-pq.load, pq.load*4, 20);
+
+    ctx.fillStyle="#0ff";
+    ctx.fillText("Threads: " + pq.threads, 20, 40);
 }
 setInterval(renderPQ, 200);
 
 /* ============================================================
-   TMP‑Ghost‑Echo‑Wave
+   TMP‑Ghost‑Echo‑Wave (4D‑Upgrade)
 ============================================================ */
 function renderTMP(){
     const c = document.getElementById("tmpEcho");
@@ -138,7 +105,7 @@ function renderTMP(){
     ctx.strokeStyle="#f0f";
     ctx.beginPath();
     for(let x=0; x<600; x++){
-        const y = 100 + Math.sin((x+tmp.echo)/20)*40;
+        const y = 100 + Math.sin((x+tmp.echo)/15)*50;
         ctx.lineTo(x,y);
     }
     ctx.stroke();
@@ -146,7 +113,7 @@ function renderTMP(){
 setInterval(renderTMP, 120);
 
 /* ============================================================
-   HUB‑ALL‑AI‑Pulse‑Map
+   HUB‑ALL‑AI‑Pulse‑Map (4D‑Upgrade)
 ============================================================ */
 function renderHUB(){
     const c = document.getElementById("hubPulse");
@@ -154,12 +121,15 @@ function renderHUB(){
     ctx.clearRect(0,0,600,200);
 
     ctx.fillStyle="#ff0";
-    ctx.fillRect(20, 100, hub.pulse/2, 20);
+    ctx.fillRect(20, 100, hub.pulse/1.5, 20);
+
+    ctx.fillStyle="#fff";
+    ctx.fillText("AI‑Mode: " + hub.mode, 20, 40);
 }
 setInterval(renderHUB, 150);
 
 /* ============================================================
-   NET‑LINK‑NC‑Fusion‑Sphere
+   NET‑LINK‑NC‑Fusion‑Sphere (4D‑Upgrade)
 ============================================================ */
 function renderNET(){
     const c = document.getElementById("netSphere");
@@ -168,10 +138,14 @@ function renderNET(){
 
     ctx.strokeStyle="#0ff";
     ctx.beginPath();
-    ctx.arc(300,100, net.quantum/50, 0, Math.PI*2);
+    ctx.arc(300,100, net.quantum/40, 0, Math.PI*2);
     ctx.stroke();
+
+    ctx.fillStyle="#0ff";
+    ctx.fillText("Fusion: " + net.fusion, 20, 40);
 }
 setInterval(renderNET, 180);
+
 
 </script>
 
