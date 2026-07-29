@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>iki1uc · 4D‑Runtime · NC · PQ · TMP · HUB · Overdrive</title>
+<title>iki1uc · 4D‑Runtime · Quantum Engine</title>
 
 <style>
 body {
@@ -24,7 +24,7 @@ pre { white-space:pre-wrap; }
 
 <body>
 
-<h1>iki1uc · 4D‑Runtime‑Visualizer</h1>
+<h1>iki1uc · 4D‑Runtime‑Quantum‑Engine</h1>
 
 <div class="panel">
     <h2>NC‑Quantum‑Matrix</h2>
@@ -58,35 +58,17 @@ import { TMP_GHOST } from "./TMP/TMP_Ghost.js";
 import { HUB_AI } from "./HUB/HUB_AI.js";
 import { NET_OVERDRIVE } from "./NET/NET_Overdrive.js";
 
-/* ============================================================
-   4D‑Runtime
-============================================================ */
-
 const nc = NC_QUANTUM();
 const pq = PQ_HYPER(nc);
 const tmp = TMP_GHOST(pq);
 const hub = HUB_AI(nc, pq, tmp);
 const over = NET_OVERDRIVE(nc, pq, tmp, hub);
 
-/* ============================================================
-   Render
-============================================================ */
-
-document.getElementById("nc").textContent =
-    JSON.stringify(nc, null, 2);
-
-document.getElementById("pq").textContent =
-    JSON.stringify(pq, null, 2);
-
-document.getElementById("tmp").textContent =
-    JSON.stringify(tmp, null, 2);
-
-document.getElementById("hub").textContent =
-    JSON.stringify(hub, null, 2);
-
-document.getElementById("over").textContent =
-    JSON.stringify(over, null, 2);
-
+document.getElementById("nc").textContent = JSON.stringify(nc, null, 2);
+document.getElementById("pq").textContent = JSON.stringify(pq, null, 2);
+document.getElementById("tmp").textContent = JSON.stringify(tmp, null, 2);
+document.getElementById("hub").textContent = JSON.stringify(hub, null, 2);
+document.getElementById("over").textContent = JSON.stringify(over, null, 2);
 </script>
 
 </body>
