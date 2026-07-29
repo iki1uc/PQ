@@ -1,34 +1,56 @@
-# IKI1UC · System Runtime
+# IKI1UC · EVO Runtime System
 
-Dieses Projekt zeigt die vollständige iki1uc‑Pipeline in einer einzigen HTML‑Runtime:
+Dieses Repository enthält die aktuelle **EVO‑Runtime** des IKI1UC‑Systems.  
+EVO ist die Weiterentwicklung des ursprünglichen ROM‑Moduls und verbindet:
 
-**ID + Pipeline + PQ + RESPO + NC + TMP + WHIRL**
+- **ID-System**
+- **WHIRL-Core**
+- **Pipeline**
+- **PQ (Parallel Queue)**
+- **RESPO (Response Flow)**
+- **NC (Node Connector)**
+- **TMP (Achsen-Speicher)**
+- **index.html Runtime-Viewer**
 
-Die `index.html` dient als zentrale Ansicht und zeigt alle System‑Komponenten live an.
+Damit bildet dieses Repository die komplette axiologische Ableitung des Systems.
 
 ---
 
-## 🔹 System-ID (ID)
+## 🔹 EVO — Axiomatische Hardware- und Speicher-Ableitung
 
-Die System‑ID ist ein einzelnes Objekt mit drei Modi:
+EVO ist ein abgeleitetes Hardware‑ und Speicher‑Modul.  
+Es erzeugt keine eigene Leistung, sondern übernimmt Power aus drei Axiomen:
+
+1. **RAM**  
+2. **CPU**  
+3. **GPU**
+
+Diese drei Axiome liefern die Basisenergie, die EVO in strukturierte Achsen, Drift und Sequenzen überführt.
+
+---
+
+## 🔹 ID-System
+
+Das ID‑System ist ein einzelnes Objekt mit drei Modi:
 
 - **KOOP** – Kooperation, Stabilisierung  
 - **NEUTRAL** – Mitte, Ausgleich  
 - **POOK** – Gegenachse, Drift  
 
-Die ID wird im gesamten System verwendet:
+Die ID wird in allen Modulen verwendet:
 
 - PQ‑Tasks  
-- RESPO‑Flow  
+- RESPO‑Flows  
 - NC‑Links  
 - TMP‑Achsen  
-- WHIRL‑Core
+- WHIRL‑Core  
+- Pipeline‑Output
 
-Die ID ist vollständig in `index.html` eingebettet.
+Die Datei **ID.html** zeigt die ID‑Modi direkt im Browser.
 
 ---
 
-## 🔹 WHIRL
+## 🔹 WHIRL-Core
 
 WHIRL erzeugt die Grundwerte des Systems:
 
@@ -37,11 +59,11 @@ WHIRL erzeugt die Grundwerte des Systems:
 - **S4** – Drift  
 - **seq** – Sequenzzeit  
 
-WHIRL ist die Basis für PQ, RESPO, NC und TMP.
+WHIRL ist die Basis für alle weiteren Module.
 
 ---
 
-## 🔹 TMP (Achsen)
+## 🔹 TMP (Achsen-Speicher)
 
 TMP speichert die aktuellen Achsen:
 
@@ -108,22 +130,22 @@ Die Pipeline wird durch ENTER im `index.html` ausgelöst.
 
 ---
 
-## 🔹 index.html
+## 🔹 index.html — System Runtime Viewer
 
 Die Runtime zeigt:
 
-- **ID‑Modus**  
-- **WHIRL‑Output**  
-- **PQ_HISTORY**  
-- **RESPO_LOG**  
-- **NC_LOG**  
-- **TMP‑Achsen**
+- **ID-Modus**
+- **WHIRL-Core**
+- **PQ_HISTORY**
+- **RESPO_LOG**
+- **NC_LOG**
+- **TMP-Achsen**
 
 Die ID kann per Button geändert werden:
 
 - KOOP  
 - NEUTRAL  
-- POOK
+- POOK  
 
 Die Pipeline wird durch Eingabe + ENTER ausgeführt.
 
@@ -133,7 +155,7 @@ Die Pipeline wird durch Eingabe + ENTER ausgeführt.
 
 Dieses Projekt dient als:
 
-- Visualisierung der iki1uc‑Pipeline  
+- Visualisierung der kompletten iki1uc‑Pipeline  
 - Debug‑Ansicht für WHIRL‑Daten  
 - Testumgebung für PQ / RESPO / NC  
 - Demonstration der System‑ID  
@@ -145,6 +167,7 @@ Dieses Projekt dient als:
 
 - `index.html` – komplette Runtime  
 - `ID.html` – System‑ID Ansicht  
+- `README.md` – Dokumentation  
 - (optional) `Visualizer.html`  
 - (optional) `NC.sync.html`  
 - (optional) `6D.tech.html`
@@ -154,4 +177,4 @@ Dieses Projekt dient als:
 ## 🔹 Lizenz
 
 Freie Nutzung innerhalb iki1uc‑Systemen.
-
+1
