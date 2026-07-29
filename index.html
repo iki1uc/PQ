@@ -1,28 +1,179 @@
-<pre id="nc"></pre>
-<pre id="pq"></pre>
-<pre id="tmp"></pre>
-<pre id="hub"></pre>
-<pre id="fusion"></pre>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>iki1uc · 4D‑MASTER‑RUNTIME · NC · PQ · TMP · HUB · NET</title>
+
+<style>
+body {
+    background:#000;
+    color:#0f0;
+    font-family:monospace;
+    padding:20px;
+}
+.panel {
+    border:1px solid #0f0;
+    padding:10px;
+    margin-bottom:20px;
+    background:#111;
+}
+h2 { color:#6cf; }
+canvas {
+    border:1px solid #0f0;
+    margin-bottom:20px;
+}
+pre { white-space:pre-wrap; }
+</style>
+</head>
+
+<body>
+
+<h1>iki1uc · 4D‑MASTER‑RUNTIME</h1>
+
+<!-- NC Quantum Spin -->
+<div class="panel">
+    <h2>NC‑Quantum‑Spin‑Animation</h2>
+    <canvas id="ncSpin" width="600" height="200"></canvas>
+    <pre id="nc"></pre>
+</div>
+
+<!-- PQ Hyperparallel -->
+<div class="panel">
+    <h2>PQ‑Hyperparallel‑Flow‑Graph</h2>
+    <canvas id="pqFlow" width="600" height="200"></canvas>
+    <pre id="pq"></pre>
+</div>
+
+<!-- TMP Ghost Echo -->
+<div class="panel">
+    <h2>TMP‑Ghost‑Echo‑Wave</h2>
+    <canvas id="tmpEcho" width="600" height="200"></canvas>
+    <pre id="tmp"></pre>
+</div>
+
+<!-- HUB ALL AI -->
+<div class="panel">
+    <h2>HUB‑ALL‑AI‑Pulse‑Map</h2>
+    <canvas id="hubPulse" width="600" height="200"></canvas>
+    <pre id="hub"></pre>
+</div>
+
+<!-- NET LINK NC -->
+<div class="panel">
+    <h2>NET‑LINK‑NC‑Fusion‑Sphere</h2>
+    <canvas id="netSphere" width="600" height="200"></canvas>
+    <pre id="net"></pre>
+</div>
 
 <script type="module">
-import { NET_LINK_NC } from "./NET_LINK_NC.js";
-import { NC_MATRIX_VISUALIZER } from "./NC_MATRIX_VISUALIZER.js";
-import { PQ_PARALLEL_MONITOR } from "./PQ_PARALLEL_MONITOR.js";
-import { TMP_WHIRL_VIEWER } from "./TMP_WHIRL_VIEWER.js";
-import { HUB_ALL_DASHBOARD } from "./HUB_ALL_DASHBOARD.js";
-import { NET_LINK_NC_FUSION } from "./NET_LINK_NC_FUSION.js";
+/* ============================================================
+   IMPORT ALL MODULES
+============================================================ */
+import { NC_QUANTUM } from "./NC/NC_Quantum.js";
+import { PQ_HYPER } from "./PQ/PQ_Hyper.js";
+import { TMP_GHOST } from "./TMP/TMP_Ghost.js";
+import { HUB_AI } from "./HUB/HUB_AI.js";
+import { NET_OVERDRIVE } from "./NET/NET_Overdrive.js";
 
-const net = NET_LINK_NC.init();
+/* ============================================================
+   INIT MODULES
+============================================================ */
+const nc = NC_QUANTUM();
+const pq = PQ_HYPER(nc);
+const tmp = TMP_GHOST(pq);
+const hub = HUB_AI(nc, pq, tmp);
+const net = NET_OVERDRIVE(nc, pq, tmp, hub);
 
-const ncVis = NC_MATRIX_VISUALIZER(net.nc);
-const pqMon = PQ_PARALLEL_MONITOR(net.pq);
-const tmpView = TMP_WHIRL_VIEWER(net.tmp);
-const hubDash = HUB_ALL_DASHBOARD(net.nc, net.pq, net.tmp, net.respo);
-const fusion = NET_LINK_NC_FUSION.init(net.nc, net.pq, net.tmp, net.respo);
+/* ============================================================
+   RENDER TEXT OUTPUT
+============================================================ */
+document.getElementById("nc").textContent = JSON.stringify(nc, null, 2);
+document.getElementById("pq").textContent = JSON.stringify(pq, null, 2);
+document.getElementById("tmp").textContent = JSON.stringify(tmp, null, 2);
+document.getElementById("hub").textContent = JSON.stringify(hub, null, 2);
+document.getElementById("net").textContent = JSON.stringify(net, null, 2);
 
-document.getElementById("nc").textContent = JSON.stringify(ncVis, null, 2);
-document.getElementById("pq").textContent = JSON.stringify(pqMon, null, 2);
-document.getElementById("tmp").textContent = JSON.stringify(tmpView, null, 2);
-document.getElementById("hub").textContent = JSON.stringify(hubDash, null, 2);
-document.getElementById("fusion").textContent = JSON.stringify(fusion, null, 2);
+/* ============================================================
+   NC‑Quantum‑Spin‑Animation
+============================================================ */
+function renderNC(){
+    const c = document.getElementById("ncSpin");
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0,0,600,200);
+
+    ctx.fillStyle="#0f0";
+    ctx.beginPath();
+    ctx.arc(300,100,50,0,Math.PI*2);
+    ctx.stroke();
+
+    ctx.save();
+    ctx.translate(300,100);
+    ctx.rotate((nc.spin+=0.05));
+    ctx.fillRect(50,0,10,10);
+    ctx.restore();
+}
+setInterval(renderNC, 30);
+
+/* ============================================================
+   PQ‑Hyperparallel‑Flow‑Graph
+============================================================ */
+function renderPQ(){
+    const c = document.getElementById("pqFlow");
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0,0,600,200);
+
+    ctx.fillStyle="#6cf";
+    ctx.fillRect(20,150-pq.load, pq.load*5, 20);
+}
+setInterval(renderPQ, 200);
+
+/* ============================================================
+   TMP‑Ghost‑Echo‑Wave
+============================================================ */
+function renderTMP(){
+    const c = document.getElementById("tmpEcho");
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0,0,600,200);
+
+    ctx.strokeStyle="#f0f";
+    ctx.beginPath();
+    for(let x=0; x<600; x++){
+        const y = 100 + Math.sin((x+tmp.echo)/20)*40;
+        ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+}
+setInterval(renderTMP, 120);
+
+/* ============================================================
+   HUB‑ALL‑AI‑Pulse‑Map
+============================================================ */
+function renderHUB(){
+    const c = document.getElementById("hubPulse");
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0,0,600,200);
+
+    ctx.fillStyle="#ff0";
+    ctx.fillRect(20, 100, hub.pulse/2, 20);
+}
+setInterval(renderHUB, 150);
+
+/* ============================================================
+   NET‑LINK‑NC‑Fusion‑Sphere
+============================================================ */
+function renderNET(){
+    const c = document.getElementById("netSphere");
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0,0,600,200);
+
+    ctx.strokeStyle="#0ff";
+    ctx.beginPath();
+    ctx.arc(300,100, net.quantum/50, 0, Math.PI*2);
+    ctx.stroke();
+}
+setInterval(renderNET, 180);
+
 </script>
+
+</body>
+</html>
