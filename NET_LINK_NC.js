@@ -1,33 +1,34 @@
-import { ATOM } from "./atom.js";
-import { ANKER } from "./anker.js";
-import { RESPO } from "./respo.js";
-
 import { NC_link_Whirl } from "./NC/NC_link_Whirl.js";
 import { PQ_PC_Parallel } from "./PQ/PQ_PC_Parallel.js";
 import { TMP_Whirl } from "./TMP/TMP_Whirl.js";
+import { PALAISE_RESPO } from "./PALAISE.RESPO.js";
+import { RESPO_WHIRL } from "./RESPO/RESPO_Whirl.js";
 
 export const NET_LINK_NC = {
 
     init(){
-        this.atom = ATOM.init().excite(2);
-        this.anker = ANKER.lock(this.atom);
-        this.respo = RESPO.update(this.atom, this.anker);
+        // 1) WHIRL → NC
+        this.nc = NC_link_Whirl();
 
-        this.nc = NC_link_Whirl(this.atom.spin);
+        // 2) NC → PQ
         this.pq = PQ_PC_Parallel(this.nc);
+
+        // 3) PQ → TMP
         this.tmp = TMP_Whirl(this.pq);
+
+        // 4) RESPO → PALAISE
+        this.truth = PALAISE_RESPO.truth("BEN");
+        this.respo = RESPO_WHIRL(this.truth);
 
         return this;
     },
 
     info(){
         return {
-            atom: this.atom.info(),
-            anker: this.anker.info(),
-            respo: this.respo.info(),
             nc: this.nc,
             pq: this.pq,
-            tmp: this.tmp
+            tmp: this.tmp,
+            respo: this.respo
         };
     }
 };
