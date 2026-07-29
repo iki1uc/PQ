@@ -1,166 +1,28 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>PQ · Symbiose · 213 ↔ 243</title>
-<pre id="net"></pre>
+<pre id="nc"></pre>
+<pre id="pq"></pre>
+<pre id="tmp"></pre>
+<pre id="hub"></pre>
+<pre id="fusion"></pre>
 
 <script type="module">
 import { NET_LINK_NC } from "./NET_LINK_NC.js";
+import { NC_MATRIX_VISUALIZER } from "./NC_MATRIX_VISUALIZER.js";
+import { PQ_PARALLEL_MONITOR } from "./PQ_PARALLEL_MONITOR.js";
+import { TMP_WHIRL_VIEWER } from "./TMP_WHIRL_VIEWER.js";
+import { HUB_ALL_DASHBOARD } from "./HUB_ALL_DASHBOARD.js";
+import { NET_LINK_NC_FUSION } from "./NET_LINK_NC_FUSION.js";
 
 const net = NET_LINK_NC.init();
 
-document.getElementById("net").textContent =
-    JSON.stringify(net.info(), null, 2);
-<pre id="net"></pre>
+const ncVis = NC_MATRIX_VISUALIZER(net.nc);
+const pqMon = PQ_PARALLEL_MONITOR(net.pq);
+const tmpView = TMP_WHIRL_VIEWER(net.tmp);
+const hubDash = HUB_ALL_DASHBOARD(net.nc, net.pq, net.tmp, net.respo);
+const fusion = NET_LINK_NC_FUSION.init(net.nc, net.pq, net.tmp, net.respo);
 
-<script type="module">
-import { NET_LINK_NC } from "./NET_LINK_NC.js";
-
-const net = NET_LINK_NC.init();
-
-document.getElementById("net").textContent =
-    JSON.stringify(net.info(), null, 2);
+document.getElementById("nc").textContent = JSON.stringify(ncVis, null, 2);
+document.getElementById("pq").textContent = JSON.stringify(pqMon, null, 2);
+document.getElementById("tmp").textContent = JSON.stringify(tmpView, null, 2);
+document.getElementById("hub").textContent = JSON.stringify(hubDash, null, 2);
+document.getElementById("fusion").textContent = JSON.stringify(fusion, null, 2);
 </script>
-
-
-<style>
-    body {
-        background:#000;
-        color:#0f0;
-        font-family:monospace;
-        margin:0;
-        padding:20px;
-    }
-    canvas {
-        border:1px solid #0f0;
-        margin-bottom:20px;
-    }
-    #log {
-        background:#111;
-        border:1px solid #0f0;
-        padding:10px;
-        height:150px;
-        overflow-y:auto;
-        margin-top:20px;
-    }
-</style>
-</head>
-
-<body>
-
-<h1>PQ · Symbiose · 213 ↔ 243</h1>
-
-<!-- PQ‑213 SYS -->
-<canvas id="pq213" width="600" height="200"></canvas>
-
-<!-- PQ‑243 ROOT -->
-<canvas id="pq243" width="600" height="200"></canvas>
-
-<!-- Hochzeit / Connect -->
-<canvas id="connect" width="600" height="200"></canvas>
-
-<!-- Runtime Log -->
-<div id="log"></div>
-
-<script type="module">
-import { PALAISE_RESPO } from "./PALAISE.RESPO.js";
-import { RESPO_WHIRL } from "./RESPO_Whirl.js";
-
-/* ============================================================
-   PQ‑Symbiose Runtime
-============================================================ */
-
-function log(msg){
-    const box = document.getElementById("log");
-    box.innerHTML += msg + "<br>";
-    box.scrollTop = box.scrollHeight;
-}
-
-/* ============================================================
-   PQ‑213 (WHIRL_SYS)
-============================================================ */
-async function render213(){
-    const truth = await PALAISE_RESPO.truth("BEN");
-    truth.pqVector.D0 = 213; // Emulation
-
-    const whirl = RESPO_WHIRL(truth);
-
-    const c = document.getElementById("pq213");
-    const ctx = c.getContext("2d");
-
-    ctx.clearRect(0,0,600,200);
-
-    ctx.fillText("PQ‑213 · WHIRL_SYS", 20, 40);
-
-    ctx.fillStyle = "#0f0";
-    ctx.fillRect(20, 80, whirl.root, 20);
-
-    log("213 → SYS send: " + whirl.seq);
-}
-
-setInterval(render213, 300);
-
-/* ============================================================
-   PQ‑243 (WHIRL_PQ)
-============================================================ */
-async function render243(){
-    const truth = await PALAISE_RESPO.truth("BEN");
-    truth.pqVector.D0 = 243; // Emulation
-
-    const whirl = RESPO_WHIRL(truth);
-
-    const c = document.getElementById("pq243");
-    const ctx = c.getContext("2d");
-
-    ctx.clearRect(0,0,600,200);
-
-    ctx.fillText("PQ‑243 · WHIRL_PQ", 20, 40);
-
-    ctx.fillStyle = "#ff0";
-    ctx.fillRect(20, 80, whirl.root, 20);
-
-    log("243 → ROOT send: " + whirl.seq);
-}
-
-setInterval(render243, 300);
-
-/* ============================================================
-   Hochzeit / Connect rdy → fix → fit → fi(n) → render.load
-============================================================ */
-let stage = 0;
-
-function renderConnect(){
-    const c = document.getElementById("connect");
-    const ctx = c.getContext("2d");
-
-    ctx.clearRect(0,0,600,200);
-
-    const stages = ["rdy", "fix", "fit", "fi(n)", "render.load"];
-
-    ctx.fillText("Hochzeit 213 ↔ 243", 20, 40);
-    ctx.fillText("Stage: " + stages[stage], 20, 80);
-
-    log("Connect: " + stages[stage]);
-
-    stage = (stage + 1) % stages.length;
-}
-
-setInterval(renderConnect, 800);
-
-/* ============================================================
-   Fehler / Miss / Fail / Help / Scan / Ghost / dx13.room
-============================================================ */
-
-function runtimeEvents(){
-    const events = ["miss", "fail", "help", "scan", "ghost", "dx13.room"];
-    const pick = events[Math.floor(Math.random()*events.length)];
-    log("Event: " + pick);
-}
-
-setInterval(runtimeEvents, 1500);
-
-</script>
-
-</body>
-</html>
