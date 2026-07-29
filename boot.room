@@ -1,0 +1,28 @@
+import { VECTOR_Whirl } from "./WHIRL/WHIRL_VEC.js";
+import { TMP_Whirl } from "./TMP/TMP_Whirl.js";
+import { PQ_PC_Parallel } from "./PQ/PQ_PC_Parallel.js";
+import { RESPO_Whirl } from "./RESPO/RESPO_Whirl.js";
+import { NC_link_Whirl } from "./NC/NC_link_Whirl.js";
+
+export function PIPELINE_LOAD(input){
+    return KI_WAKE_UP(input);
+}
+
+export function KI_WAKE_UP(input){
+
+    const v = { 
+        x: input.length, 
+        y: input.length/2, 
+        z: input.length/3 
+    };
+
+    const whirl = VECTOR_Whirl(v, performance.now());
+
+    TMP_Whirl(whirl);
+    PQ_PC_Parallel(whirl);
+
+    const respo = RESPO_Whirl(whirl);
+    const nc = NC_link_Whirl(whirl);
+
+    return { whirl, respo, nc };
+}
