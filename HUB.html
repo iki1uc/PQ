@@ -1,0 +1,9 @@
+export function HUB_ALL_DASHBOARD(nc, pq, tmp, respo){
+    return {
+        ncStatus: nc.state,
+        pqStatus: pq.state,
+        tmpStatus: tmp.state,
+        respoStatus: respo.mode,
+        signal: respo.signal
+    };
+}
