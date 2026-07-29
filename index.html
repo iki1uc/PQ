@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>IKI1UC · ALL-IN-ALL-OUT Runtime</title>
+<title>IKI1UC · System Runtime</title>
 
 <style>
 body { background:#000; color:#0ff; font-family:Consolas; padding:20px; }
@@ -10,37 +10,167 @@ h1 { color:#6cf; }
 h2 { color:#0f0; margin-top:30px; }
 pre { background:#111; padding:12px; border:1px solid #333; border-radius:6px; }
 #input { width:400px; padding:10px; background:#111; color:#0f0; border:1px solid #333; }
+button { margin:5px; padding:10px; background:#111; color:#0f0; border:1px solid #333; }
 </style>
 
 <script type="module">
 
-import { PIPELINE_LOAD } from "./boot.room";
-import { PQ_HISTORY } from "./PQ/PQ_PC_Parallel.js";
-import { NC_LOG } from "./NC/NC_link_Whirl.js";
-import { RESPO_LOG } from "./RESPO/RESPO_Whirl.js";
-import { TMP } from "./TMP/TMP_Whirl.js";
+// =========================
+// IKI1UC · System-ID
+// =========================
+
+const ID = {
+    mode: "neutral",
+
+    set(mode){
+        this.mode = mode;
+    },
+
+    info(){
+        switch(this.mode){
+            case "koop": return "KOOP · Kooperation · Stabilisierung";
+            case "neutral": return "NEUTRAL · Ausgleich · Mitte";
+            case "pook": return "POOK · Gegenachse · Drift";
+            default: return "Unbekannter Modus";
+        }
+    },
+
+    system(whirl){
+        return {
+            id_mode: this.mode,
+            core: whirl.core,
+            drift: whirl.S4,
+            axis: {
+                B: whirl.S1,
+                H: whirl.S2,
+                T: whirl.S3
+            },
+            seq: whirl.seq
+        };
+    }
+};
+
+// =========================
+// Dummy WHIRL (Demo-Version)
+// =========================
+
+function WHIRL(v){
+    return {
+        core: "WHIRL_CORE",
+        S1: v.x,
+        S2: v.y,
+        S3: v.z,
+        S4: v.x + v.y + v.z,
+        seq: performance.now()
+    };
+}
+
+// =========================
+// TMP
+// =========================
+
+const TMP = {};
+
+function TMP_Whirl(w){
+    TMP.B = w.S1;
+    TMP.H = w.S2;
+    TMP.T = w.S3;
+    TMP.seq = w.seq;
+}
+
+// =========================
+// PQ
+// =========================
+
+const PQ_HISTORY = [];
+
+function PQ_PC_Parallel(w){
+    const task = {
+        id: ID.system(w),
+        core: w.core,
+        axis: { B: w.S1, H: w.S2, T: w.S3 },
+        drift: w.S4,
+        seq: w.seq
+    };
+
+    PQ_HISTORY.push(task);
+    return task;
+}
+
+// =========================
+// RESPO
+// =========================
+
+const RESPO_LOG = [];
+
+function RESPO_Whirl(w){
+    const flow = {
+        id: ID.system(w),
+        core: w.core,
+        drift: w.S4,
+        seq: w.seq
+    };
+
+    RESPO_LOG.push(flow);
+    return flow;
+}
+
+// =========================
+// NC
+// =========================
+
+const NC_LOG = [];
+
+function NC_link_Whirl(w){
+    const link = {
+        id: ID.system(w),
+        axis: { B: w.S1, H: w.S2, T: w.S3 },
+        seq: w.seq
+    };
+
+    NC_LOG.push(link);
+    return link;
+}
+
+// =========================
+// PIPELINE
+// =========================
+
+function PIPELINE_LOAD(input){
+
+    const v = { x: input.length, y: input.length/2, z: input.length/3 };
+    const whirl = WHIRL(v);
+
+    TMP_Whirl(whirl);
+    const pq = PQ_PC_Parallel(whirl);
+    const respo = RESPO_Whirl(whirl);
+    const nc = NC_link_Whirl(whirl);
+
+    return { whirl, pq, respo, nc };
+}
+
+// =========================
+// UI
+// =========================
 
 document.addEventListener("keydown", e => {
     if(e.key === "Enter"){
         const text = document.getElementById("input").value;
         const out = PIPELINE_LOAD(text);
 
-        document.getElementById("pipeline").textContent =
-            JSON.stringify(out, null, 2);
-
-        document.getElementById("pq").textContent =
-            JSON.stringify(PQ_HISTORY, null, 2);
-
-        document.getElementById("nc").textContent =
-            JSON.stringify(NC_LOG, null, 2);
-
-        document.getElementById("respo").textContent =
-            JSON.stringify(RESPO_LOG, null, 2);
-
-        document.getElementById("axes").textContent =
-            JSON.stringify(TMP, null, 2);
+        document.getElementById("id").textContent = ID.info();
+        document.getElementById("whirl").textContent = JSON.stringify(out.whirl, null, 2);
+        document.getElementById("pq").textContent = JSON.stringify(PQ_HISTORY, null, 2);
+        document.getElementById("respo").textContent = JSON.stringify(RESPO_LOG, null, 2);
+        document.getElementById("nc").textContent = JSON.stringify(NC_LOG, null, 2);
+        document.getElementById("tmp").textContent = JSON.stringify(TMP, null, 2);
     }
 });
+
+window.setID = function(mode){
+    ID.set(mode);
+    document.getElementById("id").textContent = ID.info();
+};
 
 </script>
 
@@ -48,25 +178,33 @@ document.addEventListener("keydown", e => {
 
 <body>
 
-<h1>IKI1UC · ALL-IN-ALL-OUT Runtime</h1>
+<h1>IKI1UC · System Runtime</h1>
+
+<h2>ID-Modus</h2>
+<button onclick="setID('koop')">KOOP</button>
+<button onclick="setID('neutral')">NEUTRAL</button>
+<button onclick="setID('pook')">POOK</button>
+
+<pre id="id">Neutral</pre>
 
 <h2>Input</h2>
 <input id="input" placeholder="ENTER → Pipeline Load">
 
-<h2>Pipeline Output</h2>
-<pre id="pipeline">Warte…</pre>
+<h2>WHIRL</h2>
+<pre id="whirl">Warte…</pre>
 
 <h2>PQ_HISTORY</h2>
 <pre id="pq">Warte…</pre>
 
-<h2>NC_LOG</h2>
-<pre id="nc">Warte…</pre>
-
 <h2>RESPO_LOG</h2>
 <pre id="respo">Warte…</pre>
 
+<h2>NC_LOG</h2>
+<pre id="nc">Warte…</pre>
+
 <h2>TMP-Achsen</h2>
-<pre id="axes">Warte…</pre>
+<pre id="tmp">Warte…</pre>
 
 </body>
 </html>
+1
