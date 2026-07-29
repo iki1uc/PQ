@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>iki1uc · 4D‑Runtime · NC · PQ · TMP · HUB · Overdrive</title>
+
+<style>
+body {
+    background:#000;
+    color:#0f0;
+    font-family:monospace;
+    padding:20px;
+}
+.panel {
+    border:1px solid #0f0;
+    padding:10px;
+    margin-bottom:20px;
+    background:#111;
+}
+h2 { color:#6cf; }
+pre { white-space:pre-wrap; }
+</style>
+</head>
+
+<body>
+
+<h1>iki1uc · 4D‑Runtime‑Visualizer</h1>
+
+<div class="panel">
+    <h2>NC‑Quantum‑Matrix</h2>
+    <pre id="nc"></pre>
+</div>
+
+<div class="panel">
+    <h2>PQ‑Hyperparallel‑Engine</h2>
+    <pre id="pq"></pre>
+</div>
+
+<div class="panel">
+    <h2>TMP‑Ghost‑Cache</h2>
+    <pre id="tmp"></pre>
+</div>
+
+<div class="panel">
+    <h2>HUB‑ALL‑AI‑Core</h2>
+    <pre id="hub"></pre>
+</div>
+
+<div class="panel">
+    <h2>NET‑LINK‑NC‑Overdrive</h2>
+    <pre id="over"></pre>
+</div>
+
+<script type="module">
+import { NC_QUANTUM } from "./NC/NC_Quantum.js";
+import { PQ_HYPER } from "./PQ/PQ_Hyper.js";
+import { TMP_GHOST } from "./TMP/TMP_Ghost.js";
+import { HUB_AI } from "./HUB/HUB_AI.js";
+import { NET_OVERDRIVE } from "./NET/NET_Overdrive.js";
+
+/* ============================================================
+   4D‑Runtime
+============================================================ */
+
+const nc = NC_QUANTUM();
+const pq = PQ_HYPER(nc);
+const tmp = TMP_GHOST(pq);
+const hub = HUB_AI(nc, pq, tmp);
+const over = NET_OVERDRIVE(nc, pq, tmp, hub);
+
+/* ============================================================
+   Render
+============================================================ */
+
+document.getElementById("nc").textContent =
+    JSON.stringify(nc, null, 2);
+
+document.getElementById("pq").textContent =
+    JSON.stringify(pq, null, 2);
+
+document.getElementById("tmp").textContent =
+    JSON.stringify(tmp, null, 2);
+
+document.getElementById("hub").textContent =
+    JSON.stringify(hub, null, 2);
+
+document.getElementById("over").textContent =
+    JSON.stringify(over, null, 2);
+
+</script>
+
+</body>
+</html>
