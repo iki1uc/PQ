@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <title>PQ · Symbiose · 213 ↔ 243</title>
+<pre id="net"></pre>
+
+<script type="module">
+import { NET_LINK_NC } from "./NET_LINK_NC.js";
+
+const net = NET_LINK_NC.init();
+
+document.getElementById("net").textContent =
+    JSON.stringify(net.info(), null, 2);
+</script>
 
 <style>
     body {
