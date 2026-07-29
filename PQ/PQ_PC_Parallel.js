@@ -1,18 +1,27 @@
-import { PQ_HISTORY } from "../PQ/PQ_PC_Parallel.js";
+export const PQ_HISTORY = [];
+export const PQ = [];
 
-export const RESPO_LOG = [];
+export function PQ_PC_Parallel(v){
 
-export function RESPO_Whirl(v){
-
-    const lastPQ = PQ_HISTORY[PQ_HISTORY.length - 1] || null;
-
-    const flow = {
-        core: v.whirl.core,
+    const task = {
+        depth: v.whirl.S4,
         seq: v.seq,
-        drift: v.whirl.S4,
-        pq: lastPQ
+        core: v.whirl.core,
+        axis: {
+            B: v.whirl.S1,
+            H: v.whirl.S2,
+            T: v.whirl.S3
+        }
     };
 
-    RESPO_LOG.push(flow);
-    return flow;
+    PQ.push(task);
+
+    const next = PQ.shift();
+    if(!next) return null;
+
+    next.result = { ok: true, core: next.core };
+
+    PQ_HISTORY.push(next);
+
+    return next;
 }
