@@ -1,80 +1,12 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>IKI1UC · System-ID</title>
+<canvas id="hud6d" width="400" height="260"></canvas>
 
-<style>
-body { background:#000; color:#0ff; font-family:Consolas; padding:20px; }
-button { margin:5px; padding:10px; background:#111; color:#0f0; border:1px solid #333; }
-pre { background:#111; padding:12px; border:1px solid #333; border-radius:6px; }
-</style>
+<script type="module">
+import { PALAISE_RESPO } from "./PALAISE.RESPO.js";
+import { PALAISE_raw_6D } from "./CHO.js";
 
-<script>
-// =========================
-// IKI1UC · System-ID (eine Datei, ein Objekt)
-// =========================
-
-const ID = {
-
-    mode: "neutral",   // Standardmodus
-
-    // Modus setzen
-    set(mode){
-        this.mode = mode;
-    },
-
-    // System-Info ausgeben
-    info(){
-        switch(this.mode){
-            case "koop":
-                return "KOOP · Kooperation · Stabilisierung · gemeinsame Achse";
-            case "neutral":
-                return "NEUTRAL · Ausgleich · Mitte · keine Drift";
-            case "pook":
-                return "POOK · Gegenachse · Drift · Reaktion";
-            default:
-                return "Unbekannter Modus";
-        }
-    },
-
-    // System-ID für PQ / RESPO / NC / WHIRL
-    system(whirl){
-        return {
-            id_mode: this.mode,
-            core: whirl?.core || "none",
-            drift: whirl?.S4 || 0,
-            axis: {
-                B: whirl?.S1 || 0,
-                H: whirl?.S2 || 0,
-                T: whirl?.S3 || 0
-            },
-            seq: whirl?.seq || 0
-        };
-    }
-};
-
-// =========================
-// Ausgabe
-// =========================
-
-function showID(mode){
-    ID.set(mode);
-    document.getElementById("id-info").innerText = ID.info();
+async function runHUD(){
+    const truth = await PALAISE_RESPO.truth("BEN");
+    PALAISE_raw_6D("hud6d", truth);
 }
+setInterval(runHUD, 200);
 </script>
-
-</head>
-
-<body>
-
-<h1>IKI1UC · System-ID</h1>
-
-<button onclick="showID('koop')">KOOP</button>
-<button onclick="showID('neutral')">NEUTRAL</button>
-<button onclick="showID('pook')">POOK</button>
-
-<pre id="id-info">Wähle einen Modus…</pre>
-
-</body>
-</html>
