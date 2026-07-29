@@ -1,12 +1,43 @@
-<canvas id="hud6d" width="400" height="260"></canvas>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>PQ · ID · 6D-HUB</title>
+    <style>
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: monospace;
+            padding: 20px;
+        }
+        canvas {
+            border: 1px solid #0f0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>PQ · 6D-HUB · ID</h1>
+<p>Live-Ansicht der PQ‑6D‑Zeitachsen</p>
+
+<canvas id="hud6d" width="500" height="260"></canvas>
 
 <script type="module">
-import { PALAISE_RESPO } from "./PALAISE.RESPO.js";
+import { PQ_RUN } from "./PQ.js";
 import { PALAISE_raw_6D } from "./CHO.js";
 
 async function runHUD(){
-    const truth = await PALAISE_RESPO.truth("BEN");
+    const pq = PQ_RUN();
+    const truth = {
+        time6d: pq.VECTOR
+    };
     PALAISE_raw_6D("hud6d", truth);
 }
+
 setInterval(runHUD, 200);
 </script>
+
+</body>
+</html>
