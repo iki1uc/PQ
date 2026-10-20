@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>index.html · KOOP · PQ & HOME · eyeMEmory v4 · ARBEIT ZU ARBEIT</title>
+<title>index.html · KOOP · PQ · eyeMEmory v4 · ARBEIT ZU ARBEIT · nur PQ weil er das auch ist</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#02060a;--fg:#c8d8e8;--dim:#2a3a4a;--gut:#39ff88;--warn:#ffaa00;--bad:#ff3ea5;--cyan:#5cf0ff;--violet:#b388ff;--gold:#f0d080;--amber:#ff8a2a}
@@ -38,7 +38,7 @@ button.gold{border-color:var(--gold);color:var(--gold)} button.gold:hover{backgr
 <body>
 <div class="ecke ol"></div><div class="ecke or"></div><div class="ecke ul"></div><div class="ecke ur"></div>
 <header>
-<h1>index.html · KOOP · PQ & HOME · eyeMEmory die 0 · v4 · ARBEIT ZU ARBEIT</h1>
+<h1>index.html · KOOP · PQ · eyeMEmory die 0 · v4 · ARBEIT ZU ARBEIT · nur PQ</h1>
 <div class="sub">ABWÄHLBAR ZU WÄHLBAR · ERST NUR 9 99 999 + HOME ORT ARBEIT · PATCH + DISPATCH LIVE</div>
 <div class="live">WIR MACHEN JA NIX · WIR ZEIGEN NUR DAS LIVE WAS ARBEITET · EINGANG MASSE → ARBEIT → ARBEIT → ÜBERGABE · 4-FACH VERWALTUNG VERSCHACHTELT</div>
 <div id="fluss">
@@ -60,6 +60,7 @@ button.gold{border-color:var(--gold);color:var(--gold)} button.gold:hover{backgr
 <div class="toggle active"><span><b>999.html = EVIG NUTZ</b> · BENCH nutzt alle 9 ewig · born.t</span><input type="checkbox" id="chk999" checked onchange="updateKoop()"></div>
 <div class="toggle active"><span><b>home.html = HOME BIOS</b> · HOME ORT · Radar innen/außen ICH+DU</span><input type="checkbox" id="chkHome" checked onchange="updateKoop()"></div>
 <div class="toggle active"><span><b>ort.html = ORT</b> · eyeMEmory Ort · ein Finger von Hand</span><input type="checkbox" id="chkOrt" checked onchange="updateKoop()"></div>
+<div class="toggle active" style="border-color:#39ff88"><span><b>PQ = PQ · Parallel Queue · 2t höchste · das ist er auch</b> · Eigenhome</span><input type="checkbox" id="chkPQ" checked onchange="updateKoop()"></div>
 <div class="toggle active"><span><b>uni.html = UNI ORT / ARBEIT</b> · ARBEIT ZU ARBEIT · PATCH+DISPATCH</span><input type="checkbox" id="chkArbeit" checked onchange="updateKoop()"></div>
 <hr style="margin:12px 0;border-color:#1a2a3a">
 <p style="font-size:8px;color:var(--dim)">ALLES ANDERE = TECHNIK = erst abwählbar, später wählbar</p>
@@ -186,6 +187,7 @@ index.html Sorgfalt muss:
 <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>OP</b> GPU · SCHIEDS + AGENT · 1× FUNKTION · gpuSchiedsUndAgent()</div>
 </div>
 <button onclick="location.href='./PQ.html'" class="gold" style="width:100%;margin-top:10px">PQ EIGENHOME ÖFFNEN</button>
+<button onclick="location.href='./arbeitsnamen.html'" class="gold" style="width:100%;margin-top:6px">ARBEITSNAMEN — was tun Dateien — djinn ghost kleiner fail</button>
 </div>
 </div>
 <footer style="text-align:center;padding:12px;font-size:8px;letter-spacing:4px;color:var(--dim)">
@@ -196,7 +198,7 @@ let S={tick:0,schlag:0,masse:0,wahrheit:0,phase:'zeigt',phaseT:0,gedaechtnis:[],
 function log(m){let el=document.getElementById('log');el.innerHTML+="> "+m+"<br>";el.scrollTop=el.scrollHeight}
 function flog(m){let el=document.getElementById('flussLog');el.innerHTML+="> "+m+"<br>";el.scrollTop=el.scrollHeight}
 function updateKoop(){
- let chk={9:document.getElementById('chk9').checked,99:document.getElementById('chk99').checked,999:document.getElementById('chk999').checked,home:document.getElementById('chkHome').checked,ort:document.getElementById('chkOrt').checked,arbeit:document.getElementById('chkArbeit').checked,bio:document.getElementById('chkBio').checked,city:document.getElementById('chkCity').checked,evo:document.getElementById('chkEvo').checked,bew:document.getElementById('chkBew').checked,gpu:document.getElementById('chkGpu').checked,lvl:document.getElementById('chkLvl').checked};
+ let chk={9:document.getElementById('chk9').checked,99:document.getElementById('chk99').checked,999:document.getElementById('chk999').checked,home:document.getElementById('chkHome').checked,ort:document.getElementById('chkOrt').checked,arbeit:document.getElementById('chkArbeit').checked,pq:document.getElementById('chkPQ')?document.getElementById('chkPQ').checked:true,bio:document.getElementById('chkBio').checked,city:document.getElementById('chkCity').checked,evo:document.getElementById('chkEvo').checked,bew:document.getElementById('chkBew').checked,gpu:document.getElementById('chkGpu').checked,lvl:document.getElementById('chkLvl').checked};
  let core = chk[9]&&chk[99]&&chk[999]&&chk.home&&chk.ort&&chk.arbeit;
  let status=document.getElementById('statusText');
  let detail=document.getElementById('statusDetail');
